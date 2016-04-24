@@ -1,0 +1,2 @@
+ruby steam_id_crawler.rb search_lost_planet
+pause

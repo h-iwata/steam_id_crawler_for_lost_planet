@@ -88,7 +88,7 @@ Usage
 -------------
 
 ```sh
-» ruby steam_id_crawler.rb help search_lost_planet
+» ruby steam_id_crawler.rb search_lost_planet
 ```
 
 で実行できます
