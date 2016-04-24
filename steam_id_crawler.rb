@@ -19,7 +19,6 @@ class SteamIDCrawler < Thor
   desc 'search_lost_planet', 'steam_ids内のSteamIDから、Lost Planetを持っているユーザーを表示'
   long_desc <<-LONGDESC
     steam_ids内のSteamID64から、Lost Planetを持っているユーザーを表示
-    steam_idは、64bitのもの（数字のidを使用してください）
   LONGDESC
   def search_lost_planet(id = nil)
     begin
@@ -27,7 +26,6 @@ class SteamIDCrawler < Thor
         begin
           steam_id = row[0]
           print "[info] SteamID: #{steam_id}..."
-          raise '64bitの SteamID64（数字）を使用してください。名前では検索できません' unless steam_id.is_number?
 
           if has_game?(get_game_list_from_steam_id(steam_id), LOST_PLANET)
             print "found\n".colorize(:green)
@@ -48,7 +46,13 @@ class SteamIDCrawler < Thor
  private
 
  def get_game_list_from_steam_id(steam_id)
-   steam_community_list_URL = URI.parse("http://steamcommunity.com/profiles/#{steam_id}/games/?tab=all&xml=1")
+   if steam_id.is_number?
+     url = "http://steamcommunity.com/profiles/#{steam_id}/games/?tab=all&xml=1"
+   else
+     url = "http://steamcommunity.com/id/#{steam_id}/games/?tab=all&xml=1"
+   end
+   puts url
+   steam_community_list_URL = URI.parse(url)
    response = Net::HTTP.start(steam_community_list_URL.host, steam_community_list_URL.port) do |http|
      http.get(steam_community_list_URL.request_uri)
    end
