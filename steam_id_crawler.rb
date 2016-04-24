@@ -51,7 +51,6 @@ class SteamIDCrawler < Thor
    else
      url = "http://steamcommunity.com/id/#{steam_id}/games/?tab=all&xml=1"
    end
-   puts url
    steam_community_list_URL = URI.parse(url)
    response = Net::HTTP.start(steam_community_list_URL.host, steam_community_list_URL.port) do |http|
      http.get(steam_community_list_URL.request_uri)
