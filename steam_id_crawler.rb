@@ -26,7 +26,7 @@ class SteamIDCrawler < Thor
         begin
           steam_id = row[0]
           print "[info] SteamID: #{steam_id}..."
-
+          STDOUT.flush
           if has_game?(get_game_list_from_steam_id(steam_id), LOST_PLANET)
             print "found\n".colorize(:green)
             puts "[info] profile: http://steamcommunity.com/profiles/#{steam_id}/"
