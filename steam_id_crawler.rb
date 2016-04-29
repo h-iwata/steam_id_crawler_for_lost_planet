@@ -62,14 +62,12 @@ class SteamIDCrawler < Thor
  end
 
  def has_game?(gamelist, game_name)
-   founded = false
    gamelist.elements.each("gamesList/games/game/name") do |game|
      if game.cdatas().to_s == "[\"#{game_name}\"]"
-       founded = true
-       next
+       return true
      end
    end
-   founded
+   return false
  end
 
 end
