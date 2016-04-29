@@ -1,7 +1,7 @@
 SteamID Crawler for Lost Planet
 ===================
 
-**SteamID**のリストから、**ロストプラネット**を所有しているユーザーを検出します
+**SteamID** のリストから、**ロストプラネット** を所有しているユーザーを検出します
 
 ----------
 
@@ -84,19 +84,25 @@ C:\Users\***\workspace\***\steam_id_crawler_for_lostplanet>atom README.md
 operable program or batch file.
 ```
 
+もしくはinstall.batを実行してください
+
 Usage
 -------------
 
 ```sh
-» ruby steam_id_crawler.rb search_lost_planet
+» bin/steam_id_crawler search_lost_planet
 ```
-
-で実行できます
+もしくは **runner.bat** で実行できます
 steam_ids.csvに適宜SteamIDを追加して実行してください
 
 以下のように出力されます
 ```sh
-[info] SteamID: 76561198296160690...found
-[info] profile: http://steamcommunity.com/profiles/76561198296160690/
-[info] SteamID: 76561198267109590...not found
+$ bin/steam_id_crawler search_lost_planet
+2016-04-29 19:38:29 [INFO]  SteamID: 76561198296160690...
+2016-04-29 19:38:29 [INFO]  found
+2016-04-29 19:38:29 [INFO]  profile: http://steamcommunity.com/profiles/76561198296160690/
+
+2016-04-29 19:38:29 [INFO]  SteamID: 76561198267109590...
+2016-04-29 19:38:29 [INFO]  not found
+
 ```
