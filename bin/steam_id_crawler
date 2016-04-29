@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+# -*- mode: ruby -*-
+
+$:.unshift(File.dirname(__FILE__) + "/../lib/")
+
+require "steam_id_crawler.rb"
+SteamIDCrawler.start(ARGV)

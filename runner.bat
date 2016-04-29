@@ -1,2 +1,2 @@
-ruby steam_id_crawler.rb search_lost_planet
+ruby bin/steam_id_crawler search_lost_planet
 pause
