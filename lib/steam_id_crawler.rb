@@ -29,7 +29,7 @@ class SteamIDCrawler < Thor
             logger.info "not found\n", :red
           end
         rescue StandardError => e
-          logger.error e.to_s+ "\n"
+          logger.error "SteamID: #{steam_profile.steam_id}\n" + e.to_s+ "\n"
           next
         end
       end

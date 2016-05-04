@@ -41,7 +41,7 @@ class SteamProfile
     end
 
     gamelist = REXML::Document.new(response.body)
-    raise gamelist.elements['response/error'].cdatas().to_s if gamelist.elements['response/error'] != nil
+    raise "url:#{url}\n" + gamelist.elements['response/error'].cdatas().to_s if gamelist.elements['response/error'] != nil
     gamelist
   end
 end
