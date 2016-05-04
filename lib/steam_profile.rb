@@ -1,5 +1,6 @@
 require 'net/http'
 require 'rexml/document'
+require 'color_logger'
 
 class String
   def is_number?
@@ -9,26 +10,30 @@ end
 
 class SteamProfile
 
-  attr_reader :steam_id
+  attr_reader :steam_id, :user_created
+  STEAM_COMMUNITY_URL = 'http://steamcommunity.com/'
 
   def initialize(steam_id)
     @steam_id = steam_id
+    @user_created = !@steam_id.is_number?
+    @logger = ColorLogger.new
   end
 
   def has_game?(game_name)
-    get_game_list().each do |game|
-      if game.cdatas().to_s == "[\"#{game_name}\"]"
-        return true
-      end
+    game_list = get_game_list()
+    return false if game_list.nil? or game_list.empty?
+
+    @logger.info "#{game_list.size} game#{'s' if game_list.size > 1} found, searching..."
+    return game_list.find do |game|
+      game.cdatas().to_s == "[\"#{game_name}\"]"
     end
-    return false
   end
 
   def get_profile_url
-    if @steam_id.is_number?
-      url = "http://steamcommunity.com/profiles/#{@steam_id}"
+    if @user_created
+      url = "#{STEAM_COMMUNITY_URL}id/#{@steam_id}"
     else
-      url = "http://steamcommunity.com/id/#{@steam_id}"
+      url = "#{STEAM_COMMUNITY_URL}profiles/#{@steam_id}"
     end
   end
 
@@ -36,12 +41,21 @@ class SteamProfile
 
   def get_game_list()
     url = URI.parse(get_profile_url() + "/games/?tab=all&xml=1")
+    @logger.info "profile: #{get_profile_url()}/"
     response = Net::HTTP.start(url.host, url.port) do |http|
       http.get(url.request_uri)
     end
 
-    gamelist = REXML::Document.new(response.body)
-    raise "url:#{url}\n" + gamelist.elements['response/error'].cdatas().to_s if gamelist.elements['response/error'] != nil
-    gamelist.elements.to_a("gamesList/games/game/name")
+    game_list = REXML::Document.new(response.body)
+    if game_list.elements['response/error'] != nil
+      if ! @user_created
+        @logger.info "/profiles not found but try /id...", :red
+        @user_created = true
+        return get_game_list()
+      end
+      raise "url:#{url}\n" + game_list.elements['response/error'].cdatas().to_s
+    end
+    game_list.elements.to_a("gamesList/games/game/name")
   end
+
 end

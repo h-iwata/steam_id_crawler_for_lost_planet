@@ -23,8 +23,7 @@ class SteamIDCrawler < Thor
           logger.info "SteamID: #{steam_profile.steam_id}..."
           STDOUT.flush
           if steam_profile.has_game?(LOST_PLANET)
-            logger.info "found", :green
-            logger.info "profile: #{steam_profile.get_profile_url()}/\n"
+            logger.info "found\n", :green
           else
             logger.info "not found\n", :red
           end
