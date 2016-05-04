@@ -16,7 +16,7 @@ class SteamProfile
   end
 
   def has_game?(game_name)
-    get_game_list().elements.each("gamesList/games/game/name") do |game|
+    get_game_list().each do |game|
       if game.cdatas().to_s == "[\"#{game_name}\"]"
         return true
       end
@@ -42,6 +42,6 @@ class SteamProfile
 
     gamelist = REXML::Document.new(response.body)
     raise "url:#{url}\n" + gamelist.elements['response/error'].cdatas().to_s if gamelist.elements['response/error'] != nil
-    gamelist
+    gamelist.elements.to_a("gamesList/games/game/name")
   end
 end
