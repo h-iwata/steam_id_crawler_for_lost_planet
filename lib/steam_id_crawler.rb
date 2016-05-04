@@ -1,51 +1,8 @@
 require 'thor'
 require 'csv'
 require 'colorize'
-require 'logger'
+require 'color_logger'
 require 'steam_profile'
-
-class String
-  def is_number?
-    true if Float(self) rescue false
-  end
-end
-
-class ColorLoger
-
-  LOG_FILE = "log.txt"
-  ERROR_LOG_FILE = "errors.txt"
-
-  def info(message)
-    puts format_message('INFO', message, true)
-    file = File::open(LOG_FILE, 'a')
-    file.puts format_message('INFO', message)
-    file.close
-  end
-
-  def error(message)
-    puts format_message('ERROR', message, true)
-    file = File::open(LOG_FILE, 'a')
-    file.puts format_message('ERROR', message)
-    file.close
-
-    file = File::open(ERROR_LOG_FILE, 'a')
-    file.puts format_message('ERROR', message)
-    file.close
-  end
-
-  private
-
-  def format_message(severity, message, is_stdout = false)
-    if is_stdout
-      severity = "[#{severity}]".colorize((severity == "ERROR")? :red : :cyan)
-    else
-      severity = "[#{severity}]"
-    end
-    "#{DateTime.now.strftime('%Y-%m-%d %H:%M:%S')} #{severity}  #{message}\n"
-  end
-
-end
-
 
 class SteamIDCrawler < Thor
 
@@ -58,9 +15,9 @@ class SteamIDCrawler < Thor
     steam_ids内のSteamID64から、Lost Planetを持っているユーザーを表示
   LONGDESC
   def search_lost_planet(id = nil)
-    logger = ColorLoger.new
+    logger = ColorLogger.new
     begin
-      csv = CSV.foreach("./steam_idsa.csv") do |row|
+      csv = CSV.foreach("./steam_ids.csv") do |row|
         steam_profile = SteamProfile.new(row[0])
         logger.info "SteamID: #{steam_profile.steam_id}..."
         STDOUT.flush
