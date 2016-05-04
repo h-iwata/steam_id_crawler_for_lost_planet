@@ -7,7 +7,6 @@ class String
   end
 end
 
-
 class SteamProfile
 
   attr_reader :steam_id
